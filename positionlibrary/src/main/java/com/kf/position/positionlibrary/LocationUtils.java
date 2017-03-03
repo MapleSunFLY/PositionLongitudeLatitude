@@ -73,18 +73,20 @@ public class LocationUtils {
         //3.获取上次的位置，一般第一次运行，此值为null
         Location location = locationManager.getLastKnownLocation(locationProvider);
         if (location!=null){
-            this.location =location;
-            showLocation();
-        }else{
-            // 监视地理位置变化，第二个和第三个参数分别为更新的最短时间minTime和最短距离minDistace
-            locationManager.requestLocationUpdates(locationProvider, 5000, 3,locationListener);
-
+            setLocation(location);
         }
+        // 监视地理位置变化，第二个和第三个参数分别为更新的最短时间minTime和最短距离minDistace
+        locationManager.requestLocationUpdates(locationProvider, 5000, 3,locationListener);
     }
-    //获取经纬度
-    public Location showLocation(){
+
+    private void setLocation(Location location){
+        this.location =location;
         String address = "纬度："+location.getLatitude()+"经度："+location.getLongitude();
         Log.d(TAG,address);
+    }
+
+    //获取经纬度
+    public Location showLocation(){
         return location;
     }
 
@@ -137,8 +139,7 @@ public class LocationUtils {
         @Override
         public void onLocationChanged(Location location) {
             location.getAccuracy();//精确度
-            LocationUtils.this.location = location;
-            showLocation();
+            setLocation(location);
         }
     };
 }
